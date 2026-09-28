@@ -25,6 +25,9 @@ public class RequestFilter extends OncePerRequestFilter {
     @Value("${security.jwt.secret}")
     private String jwtSecret;
 
+    @Value("${security.jwt.issuer}")
+    private String jwtIssuer;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
@@ -33,7 +36,7 @@ public class RequestFilter extends OncePerRequestFilter {
             try {
                 Algorithm alg = Algorithm.HMAC256(jwtSecret);
                 DecodedJWT jwt = JWT.require(alg)
-                        .withIssuer("e‑commerce")
+                        .withIssuer(jwtIssuer)
                         .build()
                         .verify(token);
 
